@@ -12,13 +12,9 @@ struct ContentView: View {
     var body: some View {
         VStack {
             if OAuth.isLoggedIn {
-                Text("Welcome!")
+                Home()
             } else {
-                Button(action: {
-                    OAuth.authorize()
-                }, label: {
-                    Text("Log in")
-                })
+                Login()
             }
         }
         .padding()

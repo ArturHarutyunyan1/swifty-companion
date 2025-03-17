@@ -22,7 +22,7 @@ class OAuthManager : ObservableObject {
     static let shared = OAuthManager()
     private var credentials: Credentials?
     private var tokenValue: TokenValue?
-    private var access_token = ""
+    @Published var access_token: String = UserDefaults.standard.string(forKey: "access_token") ?? ""
     @Published var isLoggedIn = false
     @Published var errorMsg = ""
     
@@ -31,6 +31,9 @@ class OAuthManager : ObservableObject {
             self.isLoggedIn = true
         } else {
             isLoggedIn = false
+        }
+        if UserDefaults.standard.string(forKey: "access_token") == "" {
+            self.isLoggedIn = false
         }
         getValues()
     }
@@ -60,6 +63,7 @@ class OAuthManager : ObservableObject {
                         self.isLoggedIn = true
                         self.access_token = token.access_token
                         UserDefaults.standard.set(true, forKey: "LoginStatus")
+                        UserDefaults.standard.set(token.access_token, forKey: "access_token")
                     }
                 } catch {
                     print("Error \(error)")
@@ -71,6 +75,11 @@ class OAuthManager : ObservableObject {
         if let authURL = URL(string: credentials?.url ?? "") {
             UIApplication.shared.open(authURL)
         }
+    }
+    func logout() {
+        self.isLoggedIn = false
+        UserDefaults.standard.set(false, forKey: "LoginStatus")
+        UserDefaults.standard.set("", forKey: "access_token")
     }
     func getValues() {
         if let path = Bundle.main.path(forResource: "Config", ofType: "plist"),
@@ -90,5 +99,30 @@ class OAuthManager : ObservableObject {
                 credentials?.url = url
             }
         }
+    }
+    func searchUser(username: String) {
+        let url = URL(string: "https://api.intra.42.fr/v2/users/\(username)")!
+        var request = URLRequest(url: url)
+        let accessToken = self.access_token
+        request.httpMethod = "GET"
+        request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Request failed with error: \(error)")
+                return
+            }
+            if let response = response as? HTTPURLResponse {
+                print("HTTP Response: \(response.statusCode)")
+            }
+            if let data = data {
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data, options: [])
+                    print("User Info: \(json)")
+                } catch {
+                    print("Error decoding user info: \(error)")
+                }
+            }
+        }.resume()
     }
 }
