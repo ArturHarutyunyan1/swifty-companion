@@ -8,12 +8,18 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var OAuth = OAuthManager.shared
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            if OAuth.isLoggedIn {
+                Text("Welcome!")
+            } else {
+                Button(action: {
+                    OAuth.authorize()
+                }, label: {
+                    Text("Log in")
+                })
+            }
         }
         .padding()
     }

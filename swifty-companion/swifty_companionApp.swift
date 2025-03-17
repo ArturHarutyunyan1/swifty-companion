@@ -12,6 +12,21 @@ struct swifty_companionApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onOpenURL {url in
+                    handleRedirect(url: url)
+                }
+        }
+    }
+}
+
+func handleRedirect(url: URL) {
+    if let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
+       let queryItems = components.queryItems {
+        for item in queryItems {
+            if item.name == "code", let code = item.value {
+                print("Received auth code: \(code)")  // Add this to check the auth code
+                OAuthManager.shared.exchangeForToken(authCode: code)
+            }
         }
     }
 }
