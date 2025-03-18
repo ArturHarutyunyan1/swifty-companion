@@ -9,12 +9,14 @@ import SwiftUI
 
 @main
 struct swifty_companionApp: App {
+    @StateObject var networkMonitor = NetworkMonitor()
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .onOpenURL {url in
                     handleRedirect(url: url)
                 }
+                .environmentObject(networkMonitor)
         }
     }
 }

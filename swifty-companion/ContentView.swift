@@ -9,12 +9,21 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var OAuth = OAuthManager.shared
+    @EnvironmentObject var networkMonitor: NetworkMonitor
     var body: some View {
         VStack {
-            if OAuth.isLoggedIn {
-                Home()
+            if networkMonitor.isConnected {
+                if OAuth.isLoggedIn {
+                    Home()
+                } else {
+                    Login()
+                }
             } else {
-                Login()
+                VStack {
+                    Text("No internet connection")
+                        .font(.system(size: 28))
+                        .foregroundStyle(.red)
+                }
             }
         }
         .padding()
