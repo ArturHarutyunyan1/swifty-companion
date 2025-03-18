@@ -25,6 +25,11 @@ struct UserImage: Codable {
     var versions: Versions?
 }
 
+struct Cursus : Codable {
+    var name: String?
+    var id: Int?
+}
+
 struct User : Codable {
     var displayname: String?
     var login: String?
@@ -37,6 +42,7 @@ struct User : Codable {
 struct CursusUsers : Codable {
     var cursus_id: Int?
     var user: User?
+    var cursus: Cursus?
 }
 
 

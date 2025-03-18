@@ -11,7 +11,7 @@ import SwiftUI
 class ApiManager : ObservableObject {
     @Published var userInfo: UserInfo?
     
-    func searchUser(username: String) {
+    func searchUser(username: String) async {
         let url = URL(string: "https://api.intra.42.fr/v2/users/\(username)")!
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -30,7 +30,7 @@ class ApiManager : ObservableObject {
                     let decoder = try JSONDecoder().decode(UserInfo.self, from: data)
                     DispatchQueue.main.async {
                         self.userInfo = decoder
-                        print(self.userInfo)
+//                        print(self.userInfo)
                     }
                 } catch {
                     print("Error - \(error)")
