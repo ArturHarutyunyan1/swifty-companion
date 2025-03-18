@@ -30,7 +30,7 @@ class ApiManager : ObservableObject {
                     let decoder = try JSONDecoder().decode(UserInfo.self, from: data)
                     DispatchQueue.main.async {
                         self.userInfo = decoder
-//                        print(self.userInfo)
+                        print(self.userInfo)
                     }
                 } catch {
                     print("Error - \(error)")

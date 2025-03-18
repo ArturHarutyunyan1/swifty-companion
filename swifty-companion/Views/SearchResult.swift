@@ -14,6 +14,7 @@ struct SearchResult: View {
     @State private var cursusList: [String] = []
     @State private var selectedCursus: String = ""
     @State private var isVisible = false
+    @State private var cursusIndex = 0
     
     var body: some View {
         GeometryReader { geometry in
@@ -27,6 +28,7 @@ struct SearchResult: View {
                     BasicInfo(user: user)
                     DropdownMenu(geometry: geometry)
                     CursusLevel(user: user, geometry: geometry)
+                    ProjectList(user: user, geometry: geometry)
                 }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -36,8 +38,12 @@ struct SearchResult: View {
                 await API.searchUser(username: username)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     UpdateCursusNames()
+                    cursusIndex = CursusToId(cursus: selectedCursus)
                 }
             }
+        }
+        .onChange(of: selectedCursus) {
+            cursusIndex = CursusToId(cursus: selectedCursus)
         }
     }
     
@@ -176,11 +182,58 @@ struct SearchResult: View {
         }
     }
     
+//    List of projects
+    private func ProjectList(user: UserInfo, geometry: GeometryProxy) -> some View {
+        return HStack {
+            if let projects = user.projects_users {
+                if cursusIndex != -1 {
+                    VStack {
+                        ForEach(projects.filter {$0.cursus_ids![0] == cursusIndex && $0.status == "finished"}, id: \.id) {project in
+                            HStack {
+                                if let projectName = project.project?.name {
+                                    Text("\(projectName)")
+                                }
+                                Spacer()
+                                if let grade = project.final_mark,
+                                   let status = project.validated {
+                                    HStack {
+                                        Text("\(grade, specifier: "%2.f")")
+                                        if status {
+                                            Image(systemName: "checkmark")
+                                        } else {
+                                            Image(systemName: "xmark")
+                                        }
+                                    }
+                                    .foregroundStyle(status == true ? .green : .red)
+                                }
+                            }
+                            .padding()
+                            .frame(width: geometry.size.width * 0.9, height: 50)
+                            .background(Color(.systemGray6))
+                            .cornerRadius(15)
+                        }
+                    }
+                    .frame(width: geometry.size.width * 0.9)
+                }
+            }
+        }
+    }
+    
     // Helpers
     private func UpdateCursusNames() {
         if let cursusUsers = API.userInfo?.cursus_users {
             cursusList = cursusUsers.compactMap { $0.cursus?.name }
         }
         print(cursusList)
+    }
+    private func CursusToId(cursus: String) -> Int {
+        if let cursusUsers = API.userInfo?.cursus_users {
+            for cursusUser in cursusUsers {
+                if cursus == cursusUser.cursus?.name {
+                    return cursusUser.cursus?.id ?? -1
+                }
+            }
+        }
+        return (-1)
     }
 }

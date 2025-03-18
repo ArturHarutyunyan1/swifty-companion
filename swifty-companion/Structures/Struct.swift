@@ -39,6 +39,29 @@ struct User : Codable {
     var image: UserImage?
 }
 
+struct Project : Codable {
+    var name: String?
+}
+
+struct ProjectsUsers: Codable {
+    var id: Int?
+    var final_mark: Double?
+    var cursus_ids: [Int]?
+    var status: String?
+    var validated: Bool?
+    var project: Project?
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case final_mark
+        case cursus_ids
+        case status
+        case validated = "validated?"
+        case project
+    }
+}
+
+
 struct CursusUsers : Codable {
     var cursus_id: Int?
     var level: Double?
@@ -49,4 +72,5 @@ struct CursusUsers : Codable {
 
 struct UserInfo : Codable {
     var cursus_users: [CursusUsers]?
+    var projects_users: [ProjectsUsers]?
 }
