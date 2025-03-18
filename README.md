@@ -1,10 +1,6 @@
 # Swifty Companion
 
-<video width="600" controls>
-  <source src="Media/Video.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
+![](./media/video.gif)
 
 ## Description
 Swifty Companion is an iOS application built with SwiftUI that allows users to search for and view profile information of individuals based on their login credentials. The app provides detailed information, including login, skills, completed and failed projects, and more. The user interface is designed with modern layout techniques to ensure proper display across various screen sizes.
