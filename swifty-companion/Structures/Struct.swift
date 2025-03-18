@@ -41,6 +41,7 @@ struct User : Codable {
 
 struct CursusUsers : Codable {
     var cursus_id: Int?
+    var level: Double?
     var user: User?
     var cursus: Cursus?
 }

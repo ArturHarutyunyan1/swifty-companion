@@ -26,6 +26,7 @@ struct SearchResult: View {
                 if let user = API.userInfo {
                     BasicInfo(user: user)
                     DropdownMenu(geometry: geometry)
+                    CursusLevel(user: user, geometry: geometry)
                 }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -129,7 +130,7 @@ struct SearchResult: View {
                             }
                             .padding()
                             .transition(.opacity)
-                            .animation(.easeIn(duration: 0.3), value: isVisible)
+                            .animation(.easeIn(duration: 0.1), value: isVisible)
                             .frame(width: geometry.size.width * 0.9)
                             .background(Color(.systemGray6))
                             .cornerRadius(15)
@@ -141,6 +142,36 @@ struct SearchResult: View {
                         }
                     }
                 }
+            }
+        }
+    }
+    
+//    Level
+    private func CursusLevel(user: UserInfo, geometry: GeometryProxy) -> some View {
+        return HStack {
+            if let level = user.cursus_users {
+                HStack {
+                    ForEach(level.filter {$0.cursus?.name == selectedCursus}, id: \.cursus_id) {result in
+                        if let levelValue = result.level {
+                            let progress = levelValue.truncatingRemainder(dividingBy: 1)
+                            let adjustedWidth = max(geometry.size.width * CGFloat(progress), 10)
+                            VStack {
+                                HStack {
+                                    Spacer()
+                                    Text("\(levelValue, specifier: "%.2f")")
+                                    Spacer()
+                                }
+                            }
+                            .frame(width: adjustedWidth, height: 50)
+                            .background(.blue)
+                            .foregroundStyle(.white)
+                        }
+                    }
+                    Spacer()
+                }
+                .frame(width: geometry.size.width * 0.9, height: 50)
+                .background(Color(.systemGray6))
+                .cornerRadius(15)
             }
         }
     }
