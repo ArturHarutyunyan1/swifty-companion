@@ -1,5 +1,5 @@
 {
-  "originHash" : "38699e4c73a976cd2bb286606f03bdbc71aac6e13335dd9db7751922b2eec190",
+  "originHash" : "7a540465af3b32c90dd38b2a7ccdfff8e64c7615b82e0608d4f7a2b94a226aea",
   "pins" : [
     {
       "identity" : "brightfutures",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "fa66fa183dce7196d431244d0215748cd14c5758",
         "version" : "8.2.0"
+      }
+    },
+    {
+      "identity" : "chartview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AppPear/ChartView.git",
+      "state" : {
+        "revision" : "9115a992c91fa19cbb4f2241084240d38654a1fc",
+        "version" : "1.5.5"
       }
     },
     {

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Charts
 
 enum AppTab : CaseIterable, Hashable {
     case projects, achievements, skills
@@ -41,7 +42,7 @@ struct SearchResult: View {
                         case .achievements:
                             Achievements(user: user, geometry: geometry)
                         case .skills:
-                            testView2()
+                            Skills(user: user, geometry: geometry)
                         }
                     }
                 }
@@ -280,7 +281,7 @@ struct SearchResult: View {
             }
         }
     }
-    
+//    List of user's achievements
     private func Achievements(user: UserInfo, geometry: GeometryProxy) -> some View {
         return VStack {
             if let achievements = user.achievements {
@@ -316,16 +317,33 @@ struct SearchResult: View {
             }
         }
     }
-    
-    private func testView1() -> some View {
-        return HStack {
-            Text("View 2")
-        }
-    }
-    
-    private func testView2() -> some View {
-        return HStack {
-            Text("View 3")
+//    Skills
+    private func Skills(user: UserInfo, geometry: GeometryProxy) -> some View {
+        return VStack {
+            if let skill = user.cursus_users {
+                ForEach(skill.filter{$0.cursus_id == CursusToId(cursus: selectedCursus)}, id: \.cursus_id) { result in
+                    if let skills = result.skills {
+                        if skills.isEmpty {
+                            Text("No skills to display")
+                        } else {
+                            ForEach(skills, id: \.id) {item in
+                                if let name = item.name,
+                                   let level = item.level{
+                                    HStack {
+                                        Text("\(name)")
+                                        Spacer()
+                                        Text("\(level, specifier: "%.2f")%")
+                                    }
+                                    .padding()
+                                    .frame(width: geometry.size.width * 0.9)
+                                    .background(Color(.systemGray6))
+                                    .cornerRadius(15)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     

@@ -10,6 +10,7 @@
 		F3144C6F2D88CB8C0094AB10 /* OAuthSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F3144C6E2D88CB8C0094AB10 /* OAuthSwift */; };
 		F31B601D2D89FC5200F65970 /* SVGKit in Frameworks */ = {isa = PBXBuildFile; productRef = F31B601C2D89FC5200F65970 /* SVGKit */; };
 		F31B601F2D89FC5200F65970 /* SVGKitSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F31B601E2D89FC5200F65970 /* SVGKitSwift */; };
+		F31B60222D8A072B00F65970 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = F31B60212D8A072B00F65970 /* SwiftUICharts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F31B601F2D89FC5200F65970 /* SVGKitSwift in Frameworks */,
+				F31B60222D8A072B00F65970 /* SwiftUICharts in Frameworks */,
 				F31B601D2D89FC5200F65970 /* SVGKit in Frameworks */,
 				F3144C6F2D88CB8C0094AB10 /* OAuthSwift in Frameworks */,
 			);
@@ -90,6 +92,7 @@
 				F3144C6E2D88CB8C0094AB10 /* OAuthSwift */,
 				F31B601C2D89FC5200F65970 /* SVGKit */,
 				F31B601E2D89FC5200F65970 /* SVGKitSwift */,
+				F31B60212D8A072B00F65970 /* SwiftUICharts */,
 			);
 			productName = "swifty-companion";
 			productReference = F367156D2D88C59B004B909B /* swifty-companion.app */;
@@ -122,6 +125,7 @@
 			packageReferences = (
 				F3144C6D2D88CB8C0094AB10 /* XCRemoteSwiftPackageReference "OAuthSwift" */,
 				F31B601B2D89FC5200F65970 /* XCRemoteSwiftPackageReference "SVGKit" */,
+				F31B60202D8A072B00F65970 /* XCRemoteSwiftPackageReference "ChartView" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F367156E2D88C59B004B909B /* Products */;
@@ -373,6 +377,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		F31B60202D8A072B00F65970 /* XCRemoteSwiftPackageReference "ChartView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AppPear/ChartView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.5;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -390,6 +402,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F31B601B2D89FC5200F65970 /* XCRemoteSwiftPackageReference "SVGKit" */;
 			productName = SVGKitSwift;
+		};
+		F31B60212D8A072B00F65970 /* SwiftUICharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F31B60202D8A072B00F65970 /* XCRemoteSwiftPackageReference "ChartView" */;
+			productName = SwiftUICharts;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -69,12 +69,18 @@ struct Achievements : Codable {
     var image: String?
 }
 
+struct Skills : Codable {
+    var id: Int?
+    var level: Double?
+    var name: String?
+}
 
 struct CursusUsers : Codable {
     var cursus_id: Int?
     var level: Double?
     var user: User?
     var cursus: Cursus?
+    var skills: [Skills]?
 }
 
 
