@@ -1,6 +1,6 @@
 # Swifty Companion
 
-![](./media/video.gif)
+![](https://github.com/ArturHarutyunyan1/swifty-companion/blob/main/Media/video.gif)
 
 ## Description
 Swifty Companion is an iOS application built with SwiftUI that allows users to search for and view profile information of individuals based on their login credentials. The app provides detailed information, including login, skills, completed and failed projects, and more. The user interface is designed with modern layout techniques to ensure proper display across various screen sizes.
