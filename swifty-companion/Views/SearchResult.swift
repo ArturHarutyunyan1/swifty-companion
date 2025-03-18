@@ -25,11 +25,15 @@ struct SearchResult: View {
     var body: some View {
         GeometryReader { geometry in
             ScrollView(.vertical, showsIndicators: false) {
-                Button(action: {
-                    OAuth.logout()
-                }, label: {
-                    Text("LOgout")
-                })
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        OAuth.logout()
+                    }, label: {
+                        Image(systemName: "rectangle.portrait.and.arrow.right")
+                    })
+                    .foregroundStyle(.red)
+                }
                 if let user = API.userInfo {
                     BasicInfo(user: user)
                     DropdownMenu(geometry: geometry)
