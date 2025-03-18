@@ -13,8 +13,22 @@ struct Home: View {
     @State private var isActive = false
     var body: some View {
         NavigationView {
-            GeometryReader {geometry in
+            ScrollView {
                 VStack {
+                    HStack {
+                        Text("Swifty Companion")
+                            .font(.headline)
+                            .font(.system(size: 28))
+                        Spacer()
+                        Button(action: {
+                            OAuth.logout()
+                        }, label: {
+                            Image(systemName: "rectangle.portrait.and.arrow.right")
+                        })
+                        .foregroundStyle(.red)
+                    }
+                    .frame(height: 50)
+
                     HStack {
                         Image(systemName: "magnifyingglass")
                         TextField("Username", text: $username)
@@ -25,22 +39,22 @@ struct Home: View {
                             .autocapitalization(.none)
                     }
                     .padding()
-                    .frame(width: geometry.size.width * 0.9, height: 50)
+                    .frame(height: 50)
                     .background(Color(.systemGray6))
                     .cornerRadius(15)
+                    
                     NavigationLink(destination: SearchResult(username: $username), isActive: $isActive) {
                         EmptyView()
                     }
-                    Button(action: {
-                        Task {
-                            OAuth.logout()
-                        }
-                    }, label: {
-                        Text("Log out")
-                    })
                 }
-                .frame(width: geometry.size.width, height: geometry.size.height)
+                .padding()
             }
+        }
+        .onAppear() {
+            OAuth.checkExpiration()
+        }
+        .onChange(of: isActive) {
+            OAuth.checkExpiration()
         }
     }
 }

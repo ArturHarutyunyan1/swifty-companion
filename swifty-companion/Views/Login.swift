@@ -12,6 +12,12 @@ struct Login: View {
     var body: some View {
         GeometryReader {geometry in
             VStack {
+                if !OAuth.errorMsg.isEmpty {
+                    Text(OAuth.errorMsg)
+                        .foregroundColor(.red)
+                }
+            }
+            VStack {
                 Button(action: {
                     Task {
                         OAuth.authorize()
@@ -27,6 +33,9 @@ struct Login: View {
                 .padding()
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
+        }
+        .onAppear() {
+            OAuth.checkExpiration()
         }
     }
 }

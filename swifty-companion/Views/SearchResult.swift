@@ -24,16 +24,10 @@ struct SearchResult: View {
     
     var body: some View {
         GeometryReader { geometry in
+            if !OAuth.errorMsg.isEmpty {
+                Text("\(OAuth.errorMsg)")
+            }
             ScrollView(.vertical, showsIndicators: false) {
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        OAuth.logout()
-                    }, label: {
-                        Image(systemName: "rectangle.portrait.and.arrow.right")
-                    })
-                    .foregroundStyle(.red)
-                }
                 if let user = API.userInfo {
                     BasicInfo(user: user)
                     DropdownMenu(geometry: geometry)
@@ -54,6 +48,7 @@ struct SearchResult: View {
             .frame(width: geometry.size.width, height: geometry.size.height)
         }
         .onAppear {
+            OAuth.checkExpiration()
             Task {
                 await API.searchUser(username: username)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -63,6 +58,7 @@ struct SearchResult: View {
             }
         }
         .onChange(of: selectedCursus) {
+            OAuth.checkExpiration()
             cursusIndex = CursusToId(cursus: selectedCursus)
         }
     }

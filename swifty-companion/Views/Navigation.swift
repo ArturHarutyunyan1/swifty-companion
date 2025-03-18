@@ -7,12 +7,10 @@
 
 import SwiftUI
 
-struct testView: View {
+struct Navigation: View {
+    @ObservedObject var OAuth = OAuthManager.shared
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        GeometryReader {geometry in
+        }
     }
-}
-
-#Preview {
-    testView()
 }

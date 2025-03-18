@@ -17,6 +17,7 @@ class OAuthManager : ObservableObject {
     @Published var errorMsg = ""
     
     init() {
+        checkExpiration()
         if UserDefaults.standard.bool(forKey: "LoginStatus") {
             self.isLoggedIn = true
         } else {
@@ -51,11 +52,14 @@ class OAuthManager : ObservableObject {
                     let token = try JSONDecoder().decode(TokenValue.self, from: data)
                     DispatchQueue.main.async {
                         self.isLoggedIn = true
+                        let creationTime = Date.now
+                        let expirationTime = Calendar.current.date(byAdding: .hour, value: 2, to: creationTime)!
                         UserDefaults.standard.set(true, forKey: "LoginStatus")
                         UserDefaults.standard.set(token.access_token, forKey: "access_token")
+                        UserDefaults.standard.set(expirationTime, forKey: "token_expiration_time")
                     }
                 } catch {
-                    print("Error \(error)")
+                    self.errorMsg = "Something went wrong, please try again"
                 }
             }
         }.resume()
@@ -87,6 +91,14 @@ class OAuthManager : ObservableObject {
             if let url = config["url"] as? String {
                 credentials?.url = url
             }
+        }
+    }
+    func checkExpiration() {
+        if let expirationTime = UserDefaults.standard.value(forKey: "token_expiration_time") as! Date?,
+           Date.now > expirationTime
+        {
+            self.errorMsg = "Your access token has expired. Please login again."
+            self.logout()
         }
     }
 }
