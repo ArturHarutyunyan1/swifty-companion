@@ -9,10 +9,12 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject var OAuth = OAuthManager.shared
+    @State var username = "arturhar"
     var body: some View {
         VStack {
             if OAuth.isLoggedIn {
-                Home()
+//                Home()
+                SearchResult(username: $username)
             } else {
                 Login()
             }
