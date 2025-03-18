@@ -61,6 +61,14 @@ struct ProjectsUsers: Codable {
     }
 }
 
+struct Achievements : Codable {
+    var description: String?
+    var id: Int?
+    var kind: String?
+    var name: String?
+    var image: String?
+}
+
 
 struct CursusUsers : Codable {
     var cursus_id: Int?
@@ -73,4 +81,5 @@ struct CursusUsers : Codable {
 struct UserInfo : Codable {
     var cursus_users: [CursusUsers]?
     var projects_users: [ProjectsUsers]?
+    var achievements: [Achievements]?
 }

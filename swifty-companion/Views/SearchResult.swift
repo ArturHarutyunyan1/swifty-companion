@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+enum AppTab : CaseIterable, Hashable {
+    case projects, achievements, skills
+}
+
 struct SearchResult: View {
     @ObservedObject var OAuth = OAuthManager.shared
     @StateObject var API = ApiManager()
@@ -15,6 +19,7 @@ struct SearchResult: View {
     @State private var selectedCursus: String = ""
     @State private var isVisible = false
     @State private var cursusIndex = 0
+    @State private var selectedTab: AppTab = .projects
     
     var body: some View {
         GeometryReader { geometry in
@@ -28,7 +33,17 @@ struct SearchResult: View {
                     BasicInfo(user: user)
                     DropdownMenu(geometry: geometry)
                     CursusLevel(user: user, geometry: geometry)
-                    ProjectList(user: user, geometry: geometry)
+                    Tab(geometry: geometry)
+                    VStack {
+                        switch (selectedTab) {
+                        case .projects:
+                            ProjectList(user: user, geometry: geometry)
+                        case .achievements:
+                            Achievements(user: user, geometry: geometry)
+                        case .skills:
+                            testView2()
+                        }
+                    }
                 }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -160,7 +175,7 @@ struct SearchResult: View {
                     ForEach(level.filter {$0.cursus?.name == selectedCursus}, id: \.cursus_id) {result in
                         if let levelValue = result.level {
                             let progress = levelValue.truncatingRemainder(dividingBy: 1)
-                            let adjustedWidth = max(geometry.size.width * CGFloat(progress), 10)
+                            let adjustedWidth = max(geometry.size.width * CGFloat(progress) + 60, 10)
                             VStack {
                                 HStack {
                                     Spacer()
@@ -181,14 +196,62 @@ struct SearchResult: View {
             }
         }
     }
+//    Tab selection
+    private func Tab(geometry: GeometryProxy) -> some View {
+        return VStack {
+            HStack {
+                Button(action: {
+                    selectedTab = AppTab.projects
+                }, label: {
+                    HStack {
+                        Image(systemName: "apple.terminal.on.rectangle")
+                    }
+                    .frame(width: geometry.size.width * 0.3)
+                })
+                .padding()
+                .frame(width: geometry.size.width * 0.3)
+                .background(Color(.systemGray6))
+                .foregroundStyle(.black)
+                .cornerRadius(15)
+                Button(action: {
+                    selectedTab = AppTab.achievements
+                }, label: {
+                    HStack {
+                        Image(systemName: "trophy")
+                    }
+                    .frame(width: geometry.size.width * 0.3)
+                })
+                .padding()
+                .frame(width: geometry.size.width * 0.3)
+                .background(Color(.systemGray6))
+                .foregroundStyle(.black)
+                .cornerRadius(15)
+                Button(action: {
+                    selectedTab = AppTab.skills
+                }, label: {
+                    HStack {
+                        Image(systemName: "hammer")
+                    }
+                    .frame(width: geometry.size.width * 0.3)
+                })
+                .padding()
+                .frame(width: geometry.size.width * 0.3)
+                .background(Color(.systemGray6))
+                .foregroundStyle(.black)
+                .font(.system(size: 13))
+                .cornerRadius(15)
+            }
+            .frame(width: geometry.size.width * 0.9)
+        }
+    }
     
 //    List of projects
     private func ProjectList(user: UserInfo, geometry: GeometryProxy) -> some View {
-        return HStack {
+        VStack {
             if let projects = user.projects_users {
                 if cursusIndex != -1 {
                     VStack {
-                        ForEach(projects.filter {$0.cursus_ids![0] == cursusIndex && $0.status == "finished"}, id: \.id) {project in
+                        ForEach(projects.filter {$0.cursus_ids![0] == cursusIndex && $0.status == "finished"}, id: \.id) { project in
                             HStack {
                                 if let projectName = project.project?.name {
                                     Text("\(projectName)")
@@ -204,7 +267,7 @@ struct SearchResult: View {
                                             Image(systemName: "xmark")
                                         }
                                     }
-                                    .foregroundStyle(status == true ? .green : .red)
+                                    .foregroundStyle(status ? .green : .red)
                                 }
                             }
                             .padding()
@@ -213,9 +276,56 @@ struct SearchResult: View {
                             .cornerRadius(15)
                         }
                     }
-                    .frame(width: geometry.size.width * 0.9)
                 }
             }
+        }
+    }
+    
+    private func Achievements(user: UserInfo, geometry: GeometryProxy) -> some View {
+        return VStack {
+            if let achievements = user.achievements {
+                VStack {
+                    ForEach(achievements, id: \.id) {achievement in
+                        HStack {
+                            VStack {
+                                HStack {
+                                    if let name = achievement.name {
+                                        Text("\(name)")
+                                            .font(.headline)
+                                            .font(.system(size: 18))
+                                    }
+                                    Spacer()
+                                }
+                                HStack {
+                                    if let description = achievement.description {
+                                        Text("\(description)")
+                                            .font(.system(size: 15))
+                                    }
+                                    Spacer()
+                                }
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        .frame(width: geometry.size.width * 0.9)
+                        .frame(minHeight: 50)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(15)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func testView1() -> some View {
+        return HStack {
+            Text("View 2")
+        }
+    }
+    
+    private func testView2() -> some View {
+        return HStack {
+            Text("View 3")
         }
     }
     
